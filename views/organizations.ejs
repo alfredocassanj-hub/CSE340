@@ -5,50 +5,31 @@
 <h1><%= title %></h1>
 
 <p class="organization-intro">
-    Learn more about the organization I support, its structure,
+    Learn more about the organizations we support, their structure,
     mission, and main activities.
 </p>
 
 <section class="organization-images">
 
+    <% organizations.forEach(function(org) { %>
+
     <article class="organization-card">
 
-        <img src="/images/organization-1.jpg" alt="Organization building">
+        <img src="/images/<%= org.logo_filename %>" alt="<%= org.name %> logo">
 
-        <h2>Organization</h2>
+        <h2><%= org.name %></h2>
 
         <p>
-            Learn about the organization, its mission,
-            and its role in the community.
+            <%= org.description %>
+        </p>
+
+        <p class="organization-contact">
+            Contact: <a href="mailto:<%= org.contact_email %>"><%= org.contact_email %></a>
         </p>
 
     </article>
 
-    <article class="organization-card">
-
-        <img src="/images/organization-2.jpg" alt="Organization structure">
-
-        <h2>Structure</h2>
-
-        <p>
-            Learn about the organization's structure
-            and its main departments.
-        </p>
-
-    </article>
-
-    <article class="organization-card">
-
-        <img src="/images/organization-3.jpg" alt="Organization activities">
-
-        <h2>Activities</h2>
-
-        <p>
-            Learn about some of the main activities
-            and services provided by the organization.
-        </p>
-
-    </article>
+    <% }); %>
 
 </section>
 

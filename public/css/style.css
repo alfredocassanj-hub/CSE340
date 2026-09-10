@@ -2,63 +2,121 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     color: #222;
+    background-color: #f4f6f8;
 }
 
 header {
     background-color: #2c3e50;
     color: white;
-    padding: 1rem;
+    padding: 1rem 2rem;
 }
 
 nav ul {
     list-style: none;
     display: flex;
-    gap: 1rem;
+    gap: 1.5rem;
     padding: 0;
+    margin: 0;
 }
 
 nav a {
     color: white;
     text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s ease;
+}
+
+nav a:hover {
+    color: #4fd1c5;
 }
 
 main {
-    padding: 2rem;
+    padding: 3rem 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
 }
 
-/* Três imagens */
+h1 {
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+
+.organization-intro {
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto 2.5rem;
+    color: #555;
+}
+
+/* Três cartões */
 .organization-images {
     display: flex;
-    gap: 20px;
+    gap: 24px;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .organization-card {
     width: 30%;
+    min-width: 260px;
     text-align: center;
+    background-color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.organization-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .organization-card img {
     width: 100%;
     height: 150px;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 8px;
+    margin-bottom: 1rem;
+    background-color: #fafafa;
+}
+
+.organization-card h2 {
+    margin: 0.5rem 0;
+    color: #2c3e50;
+}
+
+.organization-card p {
+    color: #444;
+    line-height: 1.5;
+}
+
+.organization-contact a {
+    color: #2c7a7b;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.organization-contact a:hover {
+    text-decoration: underline;
 }
 
 footer {
     background-color: #2c3e50;
     color: white;
     text-align: center;
-    padding: 1rem;
+    padding: 1.2rem;
+    margin-top: 3rem;
 }
 
 /* Telemóvel */
 @media (max-width: 768px) {
     .organization-images {
         flex-direction: column;
+        align-items: center;
     }
 
     .organization-card {
-        width: 100%;
+        width: 90%;
     }
 }
