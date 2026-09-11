@@ -2,6 +2,8 @@ import "dotenv/config";
 import express from "express";
 import { testConnection } from "./src/models/db.js";
 import { getAllOrganizations } from "./src/models/organizations.js";
+import { getAllProjects } from "./src/models/projects.js";
+import { getAllCategories } from "./src/models/categories.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -20,12 +22,18 @@ app.get("/organizations", async (req, res) => {
   res.render("organizations", { title, organizations });
 });
 
-app.get("/projects", (req, res) => {
-  res.render("projects", { title: "Projects" });
+app.get("/projects", async (req, res) => {
+  const projects = await getAllProjects();
+  const title = "Our Service Projects";
+
+  res.render("projects", { title, projects });
 });
 
-app.get("/categories", (req, res) => {
-  res.render("categories", { title: "Categories" });
+app.get("/categories", async (req, res) => {
+  const categories = await getAllCategories();
+  const title = "Service Project Categories";
+
+  res.render("categories", { title, categories });
 });
 
 app.listen(port, async () => {

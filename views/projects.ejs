@@ -6,6 +6,15 @@
 
   <p>Description of the service projects I participate in.</p>
 
+  <section class="projects-list">
+    <% projects.forEach(function(project) { %>
+      <article class="project-card">
+        <h2><%= project.name %></h2>
+        <p><%= project.description %></p>
+      </article>
+    <% }); %>
+  </section>
+
 </main>
 
 <%- include('partials/footer') %>
