@@ -1,9 +1,9 @@
 import "dotenv/config";
 import express from "express";
 import { testConnection } from "./src/models/db.js";
-import { getAllOrganizations } from "./src/models/organizations.js";
-import { getAllProjects } from "./src/models/projects.js";
-import { getAllCategories } from "./src/models/categories.js";
+import organizationRoutes from "./src/routes/organizationRoutes.js";
+import projectRoutes from "./src/routes/projectRoutes.js";
+import categoryRoutes from "./src/routes/categoryRoutes.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -15,25 +15,33 @@ app.get("/", (req, res) => {
   res.render("index", { title: "Home" });
 });
 
-app.get("/organizations", async (req, res) => {
-  const organizations = await getAllOrganizations();
-  const title = "Our Partner Organizations";
+app.use("/organizations", organizationRoutes);
+app.use("/organization", organizationRoutes);
+app.use("/projects", projectRoutes);
+app.use("/project", projectRoutes);
+app.use("/categories", categoryRoutes);
+app.use("/category", categoryRoutes);
 
-  res.render("organizations", { title, organizations });
+// Rota coringa para 404 — DEPOIS de todas as rotas reais
+app.use((req, res, next) => {
+  const err = new Error("Page Not Found");
+  err.status = 404;
+  next(err);
 });
 
-app.get("/projects", async (req, res) => {
-  const projects = await getAllProjects();
-  const title = "Our Service Projects";
+// Handler de erros global — SEMPRE por último
+app.use((err, req, res, next) => {
+  console.error("Error occurred:", err.message);
+  console.error("Stack trace:", err.stack);
 
-  res.render("projects", { title, projects });
-});
+  const status = err.status || 500;
+  const template = status === 404 ? "errors/404" : "errors/500";
 
-app.get("/categories", async (req, res) => {
-  const categories = await getAllCategories();
-  const title = "Service Project Categories";
-
-  res.render("categories", { title, categories });
+  res.status(status).render(template, {
+    title: status === 404 ? "Page Not Found" : "Server Error",
+    error: err.message,
+    stack: process.env.NODE_ENV === "development" ? err.stack : null,
+  });
 });
 
 app.listen(port, async () => {
