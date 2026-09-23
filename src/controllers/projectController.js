@@ -5,7 +5,11 @@ import {
     createProject,
     updateProject,
 } from '../models/projects.js';
-import { getCategoriesByProjectId } from '../models/categories.js';
+import {
+    getAllCategories,
+    getCategoriesByProjectId,
+    updateCategoryAssignments,
+} from '../models/categories.js';
 import { getAllOrganizations, getOrganizationById } from '../models/organizations.js';
 
 // Validação do servidor
@@ -96,6 +100,7 @@ const processNewProjectForm = async (req, res, next) => {
 
         const { name, description, location, organization_id } = req.body;
         const newId = await createProject(name, description, location, organization_id);
+        req.session.flash = { type: 'success', message: 'Project created successfully.' };
         res.redirect(`/project/${newId}`);
     } catch (err) {
         next(err);
@@ -151,7 +156,62 @@ const processEditProjectForm = async (req, res, next) => {
             return next(err);
         }
 
+        req.session.flash = { type: 'success', message: 'Project updated successfully.' };
         res.redirect(`/project/${id}`);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const showAssignCategoriesForm = async (req, res, next) => {
+    try {
+        const projectId = req.params.projectId;
+        const project = await getProjectById(projectId);
+
+        if (!project) {
+            const err = new Error('Project Not Found');
+            err.status = 404;
+            return next(err);
+        }
+
+        const categories = await getAllCategories();
+        const assigned = await getCategoriesByProjectId(projectId);
+        const assignedIds = assigned.map((category) => category.category_id);
+
+        res.render('assign-categories', {
+            title: 'Assign Categories',
+            project,
+            categories,
+            assignedIds,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const processAssignCategoriesForm = async (req, res, next) => {
+    try {
+        const projectId = req.params.projectId;
+        const project = await getProjectById(projectId);
+
+        if (!project) {
+            const err = new Error('Project Not Found');
+            err.status = 404;
+            return next(err);
+        }
+
+        // Nenhuma marcada = undefined, uma = string, várias = array
+        const raw = req.body.categoryIds;
+        const selected = raw === undefined ? [] : Array.isArray(raw) ? raw : [raw];
+
+        // Só aceita ids de categorias que existem
+        const validIds = new Set((await getAllCategories()).map((c) => c.category_id));
+        const categoryIds = selected.map(Number).filter((id) => validIds.has(id));
+
+        await updateCategoryAssignments(projectId, categoryIds);
+
+        req.session.flash = { type: 'success', message: 'Project categories updated successfully.' };
+        res.redirect(`/project/${projectId}`);
     } catch (err) {
         next(err);
     }
@@ -165,4 +225,6 @@ export {
     processNewProjectForm,
     showEditProjectForm,
     processEditProjectForm,
+    showAssignCategoriesForm,
+    processAssignCategoriesForm,
 };

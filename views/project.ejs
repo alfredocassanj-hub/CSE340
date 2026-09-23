@@ -1,5 +1,7 @@
-<%- include('partials/header') %>
+<%- include('partials/header', { title: title }) %>
 <main>
+    <%- include('partials/flash') %>
+
     <h1><%= project.name %></h1>
 
     <p class="actions">
@@ -15,5 +17,9 @@
             <a href="/category/<%= category.category_id %>" class="tag"><%= category.name %></a>
         <% }) %>
     </div>
+
+    <p class="actions">
+        <a href="/assign-categories/<%= project.project_id %>" class="btn btn-secondary">Update categories</a>
+    </p>
 </main>
 <%- include('partials/footer') %>

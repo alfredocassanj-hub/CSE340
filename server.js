@@ -1,12 +1,13 @@
 import "dotenv/config";
 import express from "express";
+import session from "express-session";
 import { testConnection } from "./src/models/db.js";
 import organizationRoutes from "./src/routes/organizationRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";
 import categoryRoutes from "./src/routes/categoryRoutes.js";
 import categoryFormRoutes from "./src/routes/category.js";
-import organizationFormRoutes from "./src/routes/organization.js"; // NOVO
-import projectFormRoutes from "./src/routes/project.js"; // NOVO
+import organizationFormRoutes from "./src/routes/organization.js";
+import projectFormRoutes from "./src/routes/project.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -14,6 +15,21 @@ const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "dev-secret-change-me",
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Flash: disponibiliza a mensagem às views e apaga-a depois de lida
+app.use((req, res, next) => {
+  res.locals.flash = req.session.flash || null;
+  delete req.session.flash;
+  next();
+});
 
 app.get("/", (req, res) => {
   res.render("index", { title: "Home" });
@@ -28,8 +44,8 @@ app.use("/category", categoryRoutes);
 
 // Rotas de formulários (sem prefixo)
 app.use(categoryFormRoutes);
-app.use(organizationFormRoutes); // NOVO: /new-organization e /edit-organization/:id
-app.use(projectFormRoutes); // NOVO: /new-project e /edit-project/:id
+app.use(organizationFormRoutes);
+app.use(projectFormRoutes);
 
 // Rota coringa para 404 — DEPOIS de todas as rotas reais
 app.use((req, res, next) => {

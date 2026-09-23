@@ -150,6 +150,11 @@ footer a:focus-visible {
     background: #e8f3ee;
 }
 
+.actions {
+    text-align: center;
+    margin: 1rem 0 1.5rem;
+}
+
 /* ===== Formulários (criar / editar) ===== */
 .form {
     display: grid;
@@ -214,6 +219,82 @@ footer a:focus-visible {
     padding-left: 1.25rem;
 }
 
+/* ===== Mensagens flash ===== */
+.flash {
+    max-width: 32rem;
+    margin: 0 auto 1.5rem;
+    padding: 0.75rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.flash-success {
+    background: #e6f4ea;
+    color: #14532d;
+    border-left: 6px solid #1e7b3a;
+}
+
+.flash-error {
+    background: #fdecea;
+    color: #7a1010;
+    border-left: 6px solid #b00020;
+}
+
+/* ===== Lista de categorias ===== */
+.categories-list {
+    list-style: none;
+    padding: 0;
+    max-width: 32rem;
+    margin: 0 auto;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.category-item {
+    background: white;
+    border-radius: 8px;
+    padding: 0.9rem 1.2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.category-item a {
+    color: #0b5a3c;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.category-item a:hover {
+    text-decoration: underline;
+}
+
+/* ===== Atribuir categorias (checkboxes) ===== */
+.checkbox-list {
+    border: 2px solid #555;
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+.checkbox-list legend {
+    font-weight: 600;
+    padding: 0 0.4rem;
+}
+
+.form .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 400;
+}
+
+.form .checkbox-item input[type="checkbox"] {
+    width: 1.2rem;
+    height: 1.2rem;
+    padding: 0;
+    accent-color: #0b5a3c;
+}
+
 /* Telemóvel */
 @media (max-width: 768px) {
     .organization-images {
@@ -232,8 +313,4 @@ footer a:focus-visible {
     main {
         padding: 2rem 1rem;
     }
-}
-.actions {
-    text-align: center;
-    margin: 1rem 0 1.5rem;
 }

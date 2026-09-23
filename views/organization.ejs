@@ -1,6 +1,13 @@
-<%- include('partials/header') %>
+<%- include('partials/header', { title: title }) %>
 <main>
+    <%- include('partials/flash') %>
+
     <h1><%= organization.name %></h1>
+
+    <p class="actions">
+        <a href="/edit-organization/<%= organization.organization_id %>" class="btn">Editar</a>
+    </p>
+
     <p><%= organization.description %></p>
     <p>Contact: <%= organization.contact_email %></p>
 

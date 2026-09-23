@@ -77,6 +77,7 @@ const processNewOrganizationForm = async (req, res, next) => {
 
         const { name, description, contact_email, logo_filename } = req.body;
         const newId = await createOrganization(name, description, contact_email, logo_filename);
+        req.session.flash = { type: 'success', message: 'Organization created successfully.' };
         res.redirect(`/organization/${newId}`);
     } catch (err) {
         next(err);
@@ -127,6 +128,7 @@ const processEditOrganizationForm = async (req, res, next) => {
             return next(err);
         }
 
+        req.session.flash = { type: 'success', message: 'Organization updated successfully.' };
         res.redirect(`/organization/${id}`);
     } catch (err) {
         next(err);

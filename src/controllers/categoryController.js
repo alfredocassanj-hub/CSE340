@@ -60,6 +60,7 @@ const processNewCategoryForm = async (req, res, next) => {
         }
 
         const newId = await createCategory(req.body.name);
+        req.session.flash = { type: 'success', message: 'Category created successfully.' };
         res.redirect(`/category/${newId}`);
     } catch (err) {
         next(err);
@@ -103,6 +104,7 @@ const processEditCategoryForm = async (req, res, next) => {
             return next(err);
         }
 
+        req.session.flash = { type: 'success', message: 'Category updated successfully.' };
         res.redirect(`/category/${id}`);
     } catch (err) {
         next(err);
