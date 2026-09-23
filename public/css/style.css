@@ -109,6 +109,111 @@ footer {
     margin-top: 3rem;
 }
 
+/* ===== Acessibilidade: foco visível ===== */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid #005fcc;
+    outline-offset: 2px;
+}
+
+nav a:focus-visible,
+footer a:focus-visible {
+    outline-color: #4fd1c5;
+}
+
+/* ===== Botões ===== */
+.btn {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background: #0b5a3c;
+    color: #fff;
+    border: 2px solid #0b5a3c;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+    background: #084731;
+}
+
+.btn-secondary {
+    background: #fff;
+    color: #0b5a3c;
+    border: 2px solid #0b5a3c;
+}
+
+.btn-secondary:hover {
+    background: #e8f3ee;
+}
+
+/* ===== Formulários (criar / editar) ===== */
+.form {
+    display: grid;
+    gap: 0.5rem;
+    max-width: 32rem;
+    margin: 1.5rem auto;
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.form label {
+    font-weight: 600;
+}
+
+.form input,
+.form select,
+.form textarea {
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 2px solid #555;
+    border-radius: 6px;
+    font-family: inherit;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+    outline: 3px solid #005fcc;
+    outline-offset: 2px;
+}
+
+.form .btn {
+    margin-top: 0.75rem;
+    text-align: center;
+}
+
+.help {
+    font-size: 0.9rem;
+    color: #444;
+    margin: 0;
+}
+
+.form-errors {
+    background: #fdecea;
+    color: #7a1010;
+    border-left: 6px solid #b00020;
+    padding: 0.75rem 1rem;
+    margin: 1rem auto;
+    max-width: 32rem;
+    border-radius: 4px;
+}
+
+.form-errors p {
+    margin: 0 0 0.5rem;
+    font-weight: 600;
+}
+
+.form-errors ul {
+    margin: 0;
+    padding-left: 1.25rem;
+}
+
 /* Telemóvel */
 @media (max-width: 768px) {
     .organization-images {
@@ -119,4 +224,16 @@ footer {
     .organization-card {
         width: 90%;
     }
+
+    nav ul {
+        flex-wrap: wrap;
+    }
+
+    main {
+        padding: 2rem 1rem;
+    }
+}
+.actions {
+    text-align: center;
+    margin: 1rem 0 1.5rem;
 }

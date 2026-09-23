@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+<main id="main-content">
+  <h1>Nova Categoria</h1>
+
+  <% if (errors.length) { %>
+    <div class="form-errors" role="alert">
+      <p>Corrige os seguintes erros:</p>
+      <ul>
+        <% errors.forEach(e => { %><li><%= e.msg %></li><% }) %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="/new-category" method="POST" class="form">
+    <label for="name">Nome da categoria</label>
+    <input type="text" id="name" name="name"
+           value="<%= formData.name || '' %>"
+           required maxlength="100"
+           aria-describedby="name-help">
+    <p id="name-help" class="help">Máximo de 100 caracteres.</p>
+
+    <button type="submit" class="btn">Criar categoria</button>
+    <a href="/categories" class="btn btn-secondary">Cancelar</a>
+  </form>
+</main>
+<%- include('partials/footer') %>

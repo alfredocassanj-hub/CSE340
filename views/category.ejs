@@ -3,6 +3,10 @@
 <main>
   <h1><%= category.name %></h1>
 
+  <p class="actions">
+    <a href="/edit-category/<%= category.category_id %>" class="btn">Editar</a>
+  </p>
+
   <h2>Service Projects</h2>
   <ul>
     <% projects.forEach(function(project) { %>

@@ -1,0 +1,30 @@
+<%- include('partials/header', { title: title }) %>
+
+<main>
+  <h1><%= title %></h1>
+
+  <% if (errors.length) { %>
+    <div class="form-errors" role="alert">
+      <p>Corrige os seguintes erros:</p>
+      <ul>
+        <% errors.forEach(function(e) { %>
+          <li><%= e.msg %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="/edit-category/<%= category.category_id %>" method="POST" class="form">
+    <label for="name">Nome da categoria</label>
+    <input type="text" id="name" name="name"
+           value="<%= category.name %>"
+           required maxlength="100"
+           aria-describedby="name-help">
+    <p id="name-help" class="help">Máximo de 100 caracteres.</p>
+
+    <button type="submit" class="btn">Guardar alterações</button>
+    <a href="/category/<%= category.category_id %>" class="btn btn-secondary">Cancelar</a>
+  </form>
+</main>
+
+<%- include('partials/footer') %>

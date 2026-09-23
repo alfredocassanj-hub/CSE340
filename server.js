@@ -4,12 +4,14 @@ import { testConnection } from "./src/models/db.js";
 import organizationRoutes from "./src/routes/organizationRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";
 import categoryRoutes from "./src/routes/categoryRoutes.js";
+import categoryFormRoutes from "./src/routes/category.js"; // NOVO
 
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true })); // NOVO
 
 app.get("/", (req, res) => {
   res.render("index", { title: "Home" });
@@ -21,6 +23,7 @@ app.use("/projects", projectRoutes);
 app.use("/project", projectRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/category", categoryRoutes);
+app.use(categoryFormRoutes); // NOVO (sem prefixo: /new-category e /edit-category/:id)
 
 // Rota coringa para 404 — DEPOIS de todas as rotas reais
 app.use((req, res, next) => {
