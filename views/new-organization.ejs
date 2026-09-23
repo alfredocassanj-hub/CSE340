@@ -1,0 +1,25 @@
+<%- include('partials/header', { title: title }) %>
+
+<main>
+  <h1><%= title %></h1>
+
+  <% if (errors.length) { %>
+    <div class="form-errors" role="alert">
+      <p>Corrige os seguintes erros:</p>
+      <ul>
+        <% errors.forEach(function(e) { %>
+          <li><%= e.msg %></li>
+        <% }); %>
+      </ul>
+    </div>
+  <% } %>
+
+  <form action="/new-organization" method="POST" class="form">
+    <%- include('partials/organization-fields', { values: values }) %>
+
+    <button type="submit" class="btn">Criar organização</button>
+    <a href="/organizations" class="btn btn-secondary">Cancelar</a>
+  </form>
+</main>
+
+<%- include('partials/footer') %>

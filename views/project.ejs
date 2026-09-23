@@ -1,6 +1,11 @@
 <%- include('partials/header') %>
 <main>
     <h1><%= project.name %></h1>
+
+    <p class="actions">
+        <a href="/edit-project/<%= project.project_id %>" class="btn">Editar</a>
+    </p>
+
     <p><%= project.description %></p>
     <p>Location: <%= project.location %></p>
     <p>Organization: <a href="/organization/<%= organization.organization_id %>"><%= organization.name %></a></p>

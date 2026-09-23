@@ -1,6 +1,41 @@
-import { getAllProjects, getProjectById } from '../models/projects.js';
+import { body, validationResult } from 'express-validator';
+import {
+    getAllProjects,
+    getProjectById,
+    createProject,
+    updateProject,
+} from '../models/projects.js';
 import { getCategoriesByProjectId } from '../models/categories.js';
-import { getOrganizationById } from '../models/organizations.js';
+import { getAllOrganizations, getOrganizationById } from '../models/organizations.js';
+
+// Validação do servidor
+const projectValidation = [
+    body('name')
+        .trim()
+        .notEmpty().withMessage('O nome do projeto é obrigatório.').bail()
+        .isLength({ min: 3, max: 150 })
+        .withMessage('O nome do projeto deve ter entre 3 e 150 caracteres.'),
+    body('description')
+        .trim()
+        .notEmpty().withMessage('A descrição é obrigatória.').bail()
+        .isLength({ max: 500 })
+        .withMessage('A descrição deve ter no máximo 500 caracteres.'),
+    body('location')
+        .trim()
+        .notEmpty().withMessage('A localização é obrigatória.').bail()
+        .isLength({ max: 150 })
+        .withMessage('A localização deve ter no máximo 150 caracteres.'),
+    body('organization_id')
+        .notEmpty().withMessage('Escolhe uma organização.').bail()
+        .isInt({ min: 1 }).withMessage('Organização inválida.').bail()
+        .custom(async (value) => {
+            const organization = await getOrganizationById(value);
+            if (!organization) {
+                throw new Error('A organização escolhida não existe.');
+            }
+            return true;
+        }),
+];
 
 const showProjects = async (req, res, next) => {
     try {
@@ -31,4 +66,103 @@ const showProjectDetails = async (req, res, next) => {
     }
 };
 
-export { showProjects, showProjectDetails };
+const showNewProjectForm = async (req, res, next) => {
+    try {
+        const organizations = await getAllOrganizations();
+        res.render('new-project', {
+            title: 'Novo Projeto',
+            errors: [],
+            values: {},
+            organizations,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const processNewProjectForm = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            const organizations = await getAllOrganizations();
+            return res.status(400).render('new-project', {
+                title: 'Novo Projeto',
+                errors: errors.array(),
+                values: req.body,
+                organizations,
+            });
+        }
+
+        const { name, description, location, organization_id } = req.body;
+        const newId = await createProject(name, description, location, organization_id);
+        res.redirect(`/project/${newId}`);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const showEditProjectForm = async (req, res, next) => {
+    try {
+        const project = await getProjectById(req.params.id);
+
+        if (!project) {
+            const err = new Error('Project Not Found');
+            err.status = 404;
+            return next(err);
+        }
+
+        const organizations = await getAllOrganizations();
+
+        res.render('edit-project', {
+            title: 'Editar Projeto',
+            errors: [],
+            projectId: project.project_id,
+            values: project,
+            organizations,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const processEditProjectForm = async (req, res, next) => {
+    try {
+        const id = req.params.id;
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            const organizations = await getAllOrganizations();
+            return res.status(400).render('edit-project', {
+                title: 'Editar Projeto',
+                errors: errors.array(),
+                projectId: id,
+                values: req.body,
+                organizations,
+            });
+        }
+
+        const { name, description, location, organization_id } = req.body;
+        const updatedId = await updateProject(id, name, description, location, organization_id);
+
+        if (!updatedId) {
+            const err = new Error('Project Not Found');
+            err.status = 404;
+            return next(err);
+        }
+
+        res.redirect(`/project/${id}`);
+    } catch (err) {
+        next(err);
+    }
+};
+
+export {
+    showProjects,
+    showProjectDetails,
+    projectValidation,
+    showNewProjectForm,
+    processNewProjectForm,
+    showEditProjectForm,
+    processEditProjectForm,
+};

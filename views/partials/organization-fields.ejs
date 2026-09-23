@@ -1,0 +1,17 @@
+<label for="name">Nome da organização</label>
+<input type="text" id="name" name="name"
+       value="<%= values.name || '' %>" required maxlength="150">
+
+<label for="description">Descrição</label>
+<textarea id="description" name="description" rows="4"
+          required maxlength="500"><%= values.description || '' %></textarea>
+
+<label for="contact_email">Email de contacto</label>
+<input type="email" id="contact_email" name="contact_email"
+       value="<%= values.contact_email || '' %>" required maxlength="255">
+
+<label for="logo_filename">Ficheiro do logótipo</label>
+<input type="text" id="logo_filename" name="logo_filename"
+       value="<%= values.logo_filename || '' %>" required maxlength="255"
+       aria-describedby="logo-help">
+<p id="logo-help" class="help">Nome de um ficheiro em public/images, por exemplo: logo.png</p>
