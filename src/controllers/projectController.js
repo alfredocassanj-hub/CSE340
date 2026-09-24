@@ -12,30 +12,30 @@ import {
 } from '../models/categories.js';
 import { getAllOrganizations, getOrganizationById } from '../models/organizations.js';
 
-// Validação do servidor
+// Server-side validation
 const projectValidation = [
     body('name')
         .trim()
-        .notEmpty().withMessage('O nome do projeto é obrigatório.').bail()
+        .notEmpty().withMessage('Project name is required.').bail()
         .isLength({ min: 3, max: 150 })
-        .withMessage('O nome do projeto deve ter entre 3 e 150 caracteres.'),
+        .withMessage('Project name must be between 3 and 150 characters.'),
     body('description')
         .trim()
-        .notEmpty().withMessage('A descrição é obrigatória.').bail()
+        .notEmpty().withMessage('Description is required.').bail()
         .isLength({ max: 500 })
-        .withMessage('A descrição deve ter no máximo 500 caracteres.'),
+        .withMessage('Description must be 500 characters or fewer.'),
     body('location')
         .trim()
-        .notEmpty().withMessage('A localização é obrigatória.').bail()
+        .notEmpty().withMessage('Location is required.').bail()
         .isLength({ max: 150 })
-        .withMessage('A localização deve ter no máximo 150 caracteres.'),
+        .withMessage('Location must be 150 characters or fewer.'),
     body('organization_id')
-        .notEmpty().withMessage('Escolhe uma organização.').bail()
-        .isInt({ min: 1 }).withMessage('Organização inválida.').bail()
+        .notEmpty().withMessage('Please choose an organization.').bail()
+        .isInt({ min: 1 }).withMessage('Invalid organization.').bail()
         .custom(async (value) => {
             const organization = await getOrganizationById(value);
             if (!organization) {
-                throw new Error('A organização escolhida não existe.');
+                throw new Error('The selected organization does not exist.');
             }
             return true;
         }),
@@ -74,7 +74,7 @@ const showNewProjectForm = async (req, res, next) => {
     try {
         const organizations = await getAllOrganizations();
         res.render('new-project', {
-            title: 'Novo Projeto',
+            title: 'New Project',
             errors: [],
             values: {},
             organizations,
@@ -91,7 +91,7 @@ const processNewProjectForm = async (req, res, next) => {
         if (!errors.isEmpty()) {
             const organizations = await getAllOrganizations();
             return res.status(400).render('new-project', {
-                title: 'Novo Projeto',
+                title: 'New Project',
                 errors: errors.array(),
                 values: req.body,
                 organizations,
@@ -120,7 +120,7 @@ const showEditProjectForm = async (req, res, next) => {
         const organizations = await getAllOrganizations();
 
         res.render('edit-project', {
-            title: 'Editar Projeto',
+            title: 'Edit Project',
             errors: [],
             projectId: project.project_id,
             values: project,
@@ -139,7 +139,7 @@ const processEditProjectForm = async (req, res, next) => {
         if (!errors.isEmpty()) {
             const organizations = await getAllOrganizations();
             return res.status(400).render('edit-project', {
-                title: 'Editar Projeto',
+                title: 'Edit Project',
                 errors: errors.array(),
                 projectId: id,
                 values: req.body,
@@ -200,11 +200,11 @@ const processAssignCategoriesForm = async (req, res, next) => {
             return next(err);
         }
 
-        // Nenhuma marcada = undefined, uma = string, várias = array
+        // No box checked = undefined, one = string, several = array
         const raw = req.body.categoryIds;
         const selected = raw === undefined ? [] : Array.isArray(raw) ? raw : [raw];
 
-        // Só aceita ids de categorias que existem
+        // Only accept ids of categories that exist
         const validIds = new Set((await getAllCategories()).map((c) => c.category_id));
         const categoryIds = selected.map(Number).filter((id) => validIds.has(id));
 

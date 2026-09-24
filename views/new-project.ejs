@@ -5,7 +5,7 @@
 
   <% if (errors.length) { %>
     <div class="form-errors" role="alert">
-      <p>Corrige os seguintes erros:</p>
+      <p>Please fix the following errors:</p>
       <ul>
         <% errors.forEach(function(e) { %>
           <li><%= e.msg %></li>
@@ -17,8 +17,8 @@
   <form action="/new-project" method="POST" class="form">
     <%- include('partials/project-fields', { values: values, organizations: organizations }) %>
 
-    <button type="submit" class="btn">Criar projeto</button>
-    <a href="/projects" class="btn btn-secondary">Cancelar</a>
+    <button type="submit" class="btn">Create project</button>
+    <a href="/projects" class="btn btn-secondary">Cancel</a>
   </form>
 </main>
 

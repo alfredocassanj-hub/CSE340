@@ -84,7 +84,8 @@ const assignCategoryToProject = async (categoryId, projectId) => {
 };
 
 const updateCategoryAssignments = async (projectId, categoryIds) => {
-    // Remove as atribuições atuais e volta a inserir as selecionadas
+        // Remove the current assignments and insert the selected ones again
+
     await db.query('DELETE FROM public.project_category WHERE project_id = $1;', [projectId]);
 
     for (const categoryId of categoryIds) {

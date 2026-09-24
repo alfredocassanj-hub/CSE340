@@ -24,7 +24,7 @@ app.use(
   })
 );
 
-// Flash: disponibiliza a mensagem às views e apaga-a depois de lida
+// Flash: expose the message to views and clear it after it is read
 app.use((req, res, next) => {
   res.locals.flash = req.session.flash || null;
   delete req.session.flash;
@@ -42,19 +42,19 @@ app.use("/project", projectRoutes);
 app.use("/categories", categoryRoutes);
 app.use("/category", categoryRoutes);
 
-// Rotas de formulários (sem prefixo)
+// Form routes (no prefix)
 app.use(categoryFormRoutes);
 app.use(organizationFormRoutes);
 app.use(projectFormRoutes);
 
-// Rota coringa para 404 — DEPOIS de todas as rotas reais
+// Catch-all 404 route — AFTER all real routes
 app.use((req, res, next) => {
   const err = new Error("Page Not Found");
   err.status = 404;
   next(err);
 });
 
-// Handler de erros global — SEMPRE por último
+// Global error handler — ALWAYS last
 app.use((err, req, res, next) => {
   console.error("Error occurred:", err.message);
   console.error("Stack trace:", err.stack);
@@ -72,7 +72,7 @@ app.use((err, req, res, next) => {
 app.listen(port, async () => {
   try {
     await testConnection();
-    console.log(`Servidor funcionando na porta ${port}`);
+    console.log(`Server running on port ${port}`);
   } catch (error) {
     console.error("Error connecting to the database:", error);
   }

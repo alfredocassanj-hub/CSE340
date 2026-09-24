@@ -7,13 +7,13 @@ import {
     updateCategory,
 } from '../models/categories.js';
 
-// Validação do servidor: obrigatório, mínimo 3, máximo 100
+// Server-side validation: required, minimum 3, maximum 100 characters
 const categoryValidation = [
     body('name')
         .trim()
-        .notEmpty().withMessage('O nome da categoria é obrigatório.').bail()
+        .notEmpty().withMessage('Category name is required.').bail()
         .isLength({ min: 3, max: 100 })
-        .withMessage('O nome da categoria deve ter entre 3 e 100 caracteres.'),
+        .withMessage('Category name must be between 3 and 100 characters.'),
 ];
 
 const showCategories = async (req, res, next) => {
@@ -45,7 +45,7 @@ const showCategoryDetails = async (req, res, next) => {
 };
 
 const showNewCategoryForm = (req, res) => {
-    res.render('new-category', { title: 'Nova Categoria', errors: [], formData: {} });
+    res.render('new-category', { title: 'New Category', errors: [], formData: {} });
 };
 
 const processNewCategoryForm = async (req, res, next) => {
@@ -53,7 +53,7 @@ const processNewCategoryForm = async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).render('new-category', {
-                title: 'Nova Categoria',
+                title: 'New Category',
                 errors: errors.array(),
                 formData: req.body,
             });
@@ -77,7 +77,7 @@ const showEditCategoryForm = async (req, res, next) => {
             return next(err);
         }
 
-        res.render('edit-category', { title: 'Editar Categoria', errors: [], category });
+        res.render('edit-category', { title: 'Edit Category', errors: [], category });
     } catch (err) {
         next(err);
     }
@@ -90,7 +90,7 @@ const processEditCategoryForm = async (req, res, next) => {
 
         if (!errors.isEmpty()) {
             return res.status(400).render('edit-category', {
-                title: 'Editar Categoria',
+                title: 'Edit Category',
                 errors: errors.array(),
                 category: { category_id: id, name: req.body.name },
             });

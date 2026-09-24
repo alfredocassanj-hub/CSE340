@@ -7,29 +7,27 @@ import {
 } from '../models/organizations.js';
 import { getProjectsByOrganizationId } from '../models/projects.js';
 
-// Validação do servidor
+// Logo automatically assigned to every new organization
+const DEFAULT_LOGO_FILENAME = 'default-logo.svg';
+
+// Server-side validation
 const organizationValidation = [
     body('name')
         .trim()
-        .notEmpty().withMessage('O nome da organização é obrigatório.').bail()
+        .notEmpty().withMessage('Organization name is required.').bail()
         .isLength({ min: 3, max: 150 })
-        .withMessage('O nome da organização deve ter entre 3 e 150 caracteres.'),
+        .withMessage('Organization name must be between 3 and 150 characters.'),
     body('description')
         .trim()
-        .notEmpty().withMessage('A descrição é obrigatória.').bail()
+        .notEmpty().withMessage('Description is required.').bail()
         .isLength({ max: 500 })
-        .withMessage('A descrição deve ter no máximo 500 caracteres.'),
+        .withMessage('Description must be 500 characters or fewer.'),
     body('contact_email')
         .trim()
-        .notEmpty().withMessage('O email de contacto é obrigatório.').bail()
-        .isEmail().withMessage('Introduz um email válido.').bail()
+        .notEmpty().withMessage('Contact email is required.').bail()
+        .isEmail().withMessage('Please enter a valid email address.').bail()
         .isLength({ max: 255 })
-        .withMessage('O email deve ter no máximo 255 caracteres.'),
-    body('logo_filename')
-        .trim()
-        .notEmpty().withMessage('O nome do ficheiro do logótipo é obrigatório.').bail()
-        .isLength({ max: 255 })
-        .withMessage('O nome do ficheiro deve ter no máximo 255 caracteres.'),
+        .withMessage('Email must be 255 characters or fewer.'),
 ];
 
 const showOrganizations = async (req, res, next) => {
@@ -61,7 +59,7 @@ const showOrganizationDetails = async (req, res, next) => {
 };
 
 const showNewOrganizationForm = (req, res) => {
-    res.render('new-organization', { title: 'Nova Organização', errors: [], values: {} });
+    res.render('new-organization', { title: 'New Organization', errors: [], values: {} });
 };
 
 const processNewOrganizationForm = async (req, res, next) => {
@@ -69,14 +67,14 @@ const processNewOrganizationForm = async (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).render('new-organization', {
-                title: 'Nova Organização',
+                title: 'New Organization',
                 errors: errors.array(),
                 values: req.body,
             });
         }
 
-        const { name, description, contact_email, logo_filename } = req.body;
-        const newId = await createOrganization(name, description, contact_email, logo_filename);
+        const { name, description, contact_email } = req.body;
+        const newId = await createOrganization(name, description, contact_email, DEFAULT_LOGO_FILENAME);
         req.session.flash = { type: 'success', message: 'Organization created successfully.' };
         res.redirect(`/organization/${newId}`);
     } catch (err) {
@@ -95,7 +93,7 @@ const showEditOrganizationForm = async (req, res, next) => {
         }
 
         res.render('edit-organization', {
-            title: 'Editar Organização',
+            title: 'Edit Organization',
             errors: [],
             organizationId: organization.organization_id,
             values: organization,
@@ -112,15 +110,15 @@ const processEditOrganizationForm = async (req, res, next) => {
 
         if (!errors.isEmpty()) {
             return res.status(400).render('edit-organization', {
-                title: 'Editar Organização',
+                title: 'Edit Organization',
                 errors: errors.array(),
                 organizationId: id,
                 values: req.body,
             });
         }
 
-        const { name, description, contact_email, logo_filename } = req.body;
-        const updatedId = await updateOrganization(id, name, description, contact_email, logo_filename);
+        const { name, description, contact_email } = req.body;
+        const updatedId = await updateOrganization(id, name, description, contact_email);
 
         if (!updatedId) {
             const err = new Error('Organization Not Found');
