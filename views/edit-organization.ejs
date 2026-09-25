@@ -17,6 +17,13 @@
   <form action="/edit-organization/<%= organizationId %>" method="POST" class="form">
     <%- include('partials/organization-fields', { values: values }) %>
 
+    <label for="logo_filename">Logo file name</label>
+    <input type="text" id="logo_filename" name="logo_filename"
+           value="<%= values.logo_filename || '' %>"
+           required maxlength="255"
+           aria-describedby="logo-help">
+    <p id="logo-help" class="help">Name of a file in public/images, e.g. logo.png</p>
+
     <button type="submit" class="btn">Save changes</button>
     <a href="/organization/<%= organizationId %>" class="btn btn-secondary">Cancel</a>
   </form>

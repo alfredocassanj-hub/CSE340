@@ -35,16 +35,15 @@ const createOrganization = async (name, description, contactEmail, logoFilename)
     return result.rows[0].organization_id;
 };
 
-// The logo is not editable, so it is left untouched on update
-const updateOrganization = async (organizationId, name, description, contactEmail) => {
+const updateOrganization = async (organizationId, name, description, contactEmail, logoFilename) => {
     const query = `
         UPDATE public.organization
-        SET name = $1, description = $2, contact_email = $3
-        WHERE organization_id = $4
+        SET name = $1, description = $2, contact_email = $3, logo_filename = $4
+        WHERE organization_id = $5
         RETURNING organization_id;
     `;
 
-    const result = await db.query(query, [name, description, contactEmail, organizationId]);
+    const result = await db.query(query, [name, description, contactEmail, logoFilename, organizationId]);
 
     return result.rows[0]?.organization_id || null;
 };

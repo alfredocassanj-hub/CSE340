@@ -10,7 +10,7 @@ import { getProjectsByOrganizationId } from '../models/projects.js';
 // Logo automatically assigned to every new organization
 const DEFAULT_LOGO_FILENAME = 'default-logo.svg';
 
-// Server-side validation
+// Server-side validation (shared fields for create and edit)
 const organizationValidation = [
     body('name')
         .trim()
@@ -28,6 +28,16 @@ const organizationValidation = [
         .isEmail().withMessage('Please enter a valid email address.').bail()
         .isLength({ max: 255 })
         .withMessage('Email must be 255 characters or fewer.'),
+];
+
+// Extra validation only for the edit form, where the logo is editable
+const editOrganizationValidation = [
+    ...organizationValidation,
+    body('logo_filename')
+        .trim()
+        .notEmpty().withMessage('Logo file name is required.').bail()
+        .isLength({ max: 255 })
+        .withMessage('Logo file name must be 255 characters or fewer.'),
 ];
 
 const showOrganizations = async (req, res, next) => {
@@ -117,8 +127,8 @@ const processEditOrganizationForm = async (req, res, next) => {
             });
         }
 
-        const { name, description, contact_email } = req.body;
-        const updatedId = await updateOrganization(id, name, description, contact_email);
+        const { name, description, contact_email, logo_filename } = req.body;
+        const updatedId = await updateOrganization(id, name, description, contact_email, logo_filename);
 
         if (!updatedId) {
             const err = new Error('Organization Not Found');
@@ -137,6 +147,7 @@ export {
     showOrganizations,
     showOrganizationDetails,
     organizationValidation,
+    editOrganizationValidation,
     showNewOrganizationForm,
     processNewOrganizationForm,
     showEditOrganizationForm,
