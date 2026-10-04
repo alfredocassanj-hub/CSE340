@@ -2,23 +2,41 @@
 
 <main>
 
-  <h1><%= title %></h1>
+    <h1><%= title %></h1>
 
-  <p class="actions">
-    <a href="/new-project" class="btn">Add project</a>
-  </p>
+    <% if (isAdmin) { %>
+        <p class="actions">
+            <a href="/new-project" class="btn">Add project</a>
+        </p>
+    <% } %>
 
-  <p>Description of the service projects I participate in.</p>
+    <p>Description of the service projects I participate in.</p>
 
-  <section class="projects-list">
-    <% projects.forEach(function(project) { %>
-      <article class="project-card">
-        <h2><a href="/project/<%= project.project_id %>"><%= project.name %></a></h2>
-        <p><%= project.description %></p>
-        <p class="project-location">Location: <%= project.location %></p>
-      </article>
-    <% }); %>
-  </section>
+    <section class="projects-list">
+
+        <% projects.forEach(function(project) { %>
+
+            <article class="project-card">
+
+                <h2>
+                    <a href="/project/<%= project.project_id %>">
+                        <%= project.name %>
+                    </a>
+                </h2>
+
+                <p>
+                    <%= project.description %>
+                </p>
+
+                <p class="project-location">
+                    Location: <%= project.location %>
+                </p>
+
+            </article>
+
+        <% }); %>
+
+    </section>
 
 </main>
 

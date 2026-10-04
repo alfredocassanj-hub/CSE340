@@ -1,25 +1,61 @@
 <%- include('partials/header', { title: title }) %>
+
 <main>
+
     <%- include('partials/flash') %>
 
     <h1><%= project.name %></h1>
 
-    <p class="actions">
-        <a href="/edit-project/<%= project.project_id %>" class="btn">Edit</a>
-    </p>
+    <% if (isAdmin) { %>
+        <p class="actions">
+            <a
+                href="/edit-project/<%= project.project_id %>"
+                class="btn"
+            >
+                Edit
+            </a>
+        </p>
+    <% } %>
 
     <p><%= project.description %></p>
-    <p>Location: <%= project.location %></p>
-    <p>Organization: <a href="/organization/<%= organization.organization_id %>"><%= organization.name %></a></p>
+
+    <p>
+        Location: <%= project.location %>
+    </p>
+
+    <p>
+        Organization:
+        <a href="/organization/<%= organization.organization_id %>">
+            <%= organization.name %>
+        </a>
+    </p>
 
     <div class="category-tags">
+
         <% categories.forEach(category => { %>
-            <a href="/category/<%= category.category_id %>" class="tag"><%= category.name %></a>
+
+            <a
+                href="/category/<%= category.category_id %>"
+                class="tag"
+            >
+                <%= category.name %>
+            </a>
+
         <% }) %>
+
     </div>
 
-    <p class="actions">
-        <a href="/assign-categories/<%= project.project_id %>" class="btn btn-secondary">Update categories</a>
-    </p>
+    <% if (isAdmin) { %>
+        <p class="actions">
+            <a
+                href="/assign-categories/<%= project.project_id %>"
+                class="btn btn-secondary"
+            >
+                Update categories
+            </a>
+        </p>
+    <% } %>
+
 </main>
+
 <%- include('partials/footer') %>

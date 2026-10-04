@@ -1,0 +1,27 @@
+<%- include('partials/header', { title: title }) %>
+
+<main>
+    <h1><%= title %></h1>
+    
+<img src="/images/home.jpg" alt="Community service">
+
+<p>Welcome to my CSE 340 course site.</p>
+
+
+</main>
+
+<%- include('partials/footer') %>
+
+<%- include('partials/header') %>
+
+<main>
+    <h1><%= title %></h1>
+
+    <p>Welcome to my CSE 340 application.</p>
+
+    <% if (isLoggedIn) { %>
+        <p><a href="/dashboard">My Dashboard</a></p>
+    <% } %>
+</main>
+
+<%- include('partials/footer') %>

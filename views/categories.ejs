@@ -1,19 +1,31 @@
 <%- include('partials/header', { title: title }) %>
 
 <main>
-  <h1><%= title %></h1>
 
-  <p class="actions">
-    <a href="/new-category" class="btn">Add category</a>
-  </p>
+    <h1><%= title %></h1>
 
-  <ul class="categories-list">
-    <% categories.forEach(function(category) { %>
-      <li class="category-item">
-        <a href="/category/<%= category.category_id %>"><%= category.name %></a>
-      </li>
-    <% }); %>
-  </ul>
+    <% if (isAdmin) { %>
+        <p class="actions">
+            <a href="/new-category" class="btn">Add category</a>
+        </p>
+    <% } %>
+
+    <ul class="categories-list">
+
+        <% categories.forEach(function(category) { %>
+
+            <li class="category-item">
+
+                <a href="/category/<%= category.category_id %>">
+                    <%= category.name %>
+                </a>
+
+            </li>
+
+        <% }); %>
+
+    </ul>
+
 </main>
 
 <%- include('partials/footer') %>

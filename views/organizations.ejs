@@ -2,40 +2,52 @@
 
 <main class="organization-page">
 
-<h1><%= title %></h1>
+    <h1><%= title %></h1>
 
-<p class="organization-intro">
-    Learn more about the organizations we support, their structure,
-    mission, and main activities.
-</p>
+    <p class="organization-intro">
+        Learn more about the organizations we support, their structure,
+        mission, and main activities.
+    </p>
 
-<p class="actions">
-    <a href="/new-organization" class="btn">Add organization</a>
-</p>
-
-<section class="organization-images">
-
-    <% organizations.forEach(function(org) { %>
-
-    <article class="organization-card">
-
-        <img src="/images/<%= org.logo_filename %>" alt="<%= org.name %> logo">
-
-        <h2><a href="/organization/<%= org.organization_id %>"><%= org.name %></a></h2>
-
-        <p>
-            <%= org.description %>
+    <% if (isAdmin) { %>
+        <p class="actions">
+            <a href="/new-organization" class="btn">Add organization</a>
         </p>
+    <% } %>
 
-        <p class="organization-contact">
-            Contact: <a href="mailto:<%= org.contact_email %>"><%= org.contact_email %></a>
-        </p>
+    <section class="organization-images">
 
-    </article>
+        <% organizations.forEach(function(org) { %>
 
-    <% }); %>
+        <article class="organization-card">
 
-</section>
+            <img
+                src="/images/<%= org.logo_filename %>"
+                alt="<%= org.name %> logo"
+            >
+
+            <h2>
+                <a href="/organization/<%= org.organization_id %>">
+                    <%= org.name %>
+                </a>
+            </h2>
+
+            <p>
+                <%= org.description %>
+            </p>
+
+            <p class="organization-contact">
+                Contact:
+                <a href="mailto:<%= org.contact_email %>">
+                    <%= org.contact_email %>
+                </a>
+            </p>
+
+        </article>
+
+        <% }); %>
+
+    </section>
 
 </main>
 
