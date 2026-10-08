@@ -8,6 +8,8 @@ import {
     processEditProjectForm,
     showAssignCategoriesForm,
     processAssignCategoriesForm,
+    processVolunteer,
+    processRemoveVolunteer,
 } from '../controllers/projectController.js';
 
 import {
@@ -59,6 +61,18 @@ router.post(
     requireLogin,
     requireRole(2),
     processAssignCategoriesForm
+);
+
+router.get(
+    '/volunteer/:id',
+    requireLogin,
+    processVolunteer
+);
+
+router.get(
+    '/remove-volunteer/:id',
+    requireLogin,
+    processRemoveVolunteer
 );
 
 export default router;

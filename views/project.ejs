@@ -45,6 +45,28 @@
 
     </div>
 
+    <% if (isLoggedIn) { %>
+        <div class="actions">
+            <% if (volunteerStatus) { %>
+                <p>You are volunteering for this project.</p>
+
+                <a
+                    href="/remove-volunteer/<%= project.project_id %>"
+                    class="btn btn-secondary"
+                >
+                    Remove volunteer
+                </a>
+            <% } else { %>
+                <a
+                    href="/volunteer/<%= project.project_id %>"
+                    class="btn"
+                >
+                    Volunteer for this project
+                </a>
+            <% } %>
+        </div>
+    <% } %>
+
     <% if (isAdmin) { %>
         <p class="actions">
             <a

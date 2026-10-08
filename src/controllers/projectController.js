@@ -4,6 +4,9 @@ import {
     getProjectById,
     createProject,
     updateProject,
+    addVolunteer,
+    removeVolunteer,
+    isVolunteer,
 } from '../models/projects.js';
 import {
     getAllCategories,
@@ -64,7 +67,66 @@ const showProjectDetails = async (req, res, next) => {
         const organization = await getOrganizationById(project.organization_id);
         const categories = await getCategoriesByProjectId(projectId);
 
-        res.render('project', { title: project.name, project, organization, categories });
+        let volunteerStatus = false;
+
+        if (req.session && req.session.user) {
+            volunteerStatus = await isVolunteer(
+                req.session.user.user_id,
+                projectId
+            );
+        }
+
+        res.render('project', {
+            title: project.name,
+            project,
+            organization,
+            categories,
+            volunteerStatus,
+        });
+    } catch (err) {
+        next(err);
+    }
+};
+
+const processVolunteer = async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        const userId = req.session.user.user_id;
+
+        const project = await getProjectById(projectId);
+
+        if (!project) {
+            const err = new Error('Project Not Found');
+            err.status = 404;
+            return next(err);
+        }
+
+        await addVolunteer(userId, projectId);
+
+        req.session.flash = {
+            type: 'success',
+            message: 'You are now volunteering for this project.'
+        };
+
+        res.redirect(`/project/${projectId}`);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const processRemoveVolunteer = async (req, res, next) => {
+    try {
+        const projectId = req.params.id;
+        const userId = req.session.user.user_id;
+
+        await removeVolunteer(userId, projectId);
+
+        req.session.flash = {
+            type: 'success',
+            message: 'You are no longer volunteering for this project.'
+        };
+
+        res.redirect(`/project/${projectId}`);
     } catch (err) {
         next(err);
     }
@@ -227,4 +289,6 @@ export {
     processEditProjectForm,
     showAssignCategoriesForm,
     processAssignCategoriesForm,
+    processVolunteer,
+    processRemoveVolunteer,
 };
